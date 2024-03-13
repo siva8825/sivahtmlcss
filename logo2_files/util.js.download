@@ -1,0 +1,35 @@
+if(!Array.prototype.uniq){Array.prototype.uniq=function(){let t;return this.filter((t={},e=>!(t[e]=e in t)));};}
+if(!Array.prototype.remove_all){Array.prototype.remove_all=function(value){while(true){let index=this.indexOf(value);if(index===-1){break;}
+this.splice(index,1);}
+return this;};}
+if(!Array.prototype.remove){Array.prototype.remove=function(value){let index=this.indexOf(value);if(index>=0){this.splice(index,1);}
+return this;};}
+function compact_text_insecure(txt){let hash=0,i,chr;if(txt.length===0)return hash;for(i=0;i<txt.length;i++){chr=txt.charCodeAt(i);hash=((hash<<5)-hash)+chr;hash|=0;}
+return hash;}
+function safe_load_js(elem,path){let _hashed='slj'+compact_text_insecure(path);if(document.querySelector(`.${_hashed}`)){return Promise.resolve(true);}
+return new Promise(function(resolve){let script=document.createElement('script');script.src=path;script.classList.add(_hashed);script.onload=()=>resolve(true);elem.appendChild(script);});}
+function is_really_an_object(possible_object){return typeof possible_object==='object'&&possible_object!==null;}
+function is_really_an_js_object(possible_object){return typeof possible_object==='object'&&possible_object!==null&&possible_object.constructor.name==="Object";}
+function sleep(ms){return new Promise(resolve=>setTimeout(resolve,ms));}
+function async_timeout(prom,timeout,msg){if(isNaN(timeout)||timeout<=0){return prom;}
+if(msg===undefined){msg="";}
+let fut=new Promise(function(resolve,reject){setTimeout(function(){reject(new AsyncPromiseTimeout(`Promise timed out in ${timeout}ms: ${msg}`));},timeout);});return Promise.race([prom,fut]);}
+async function wait_for(prom,timeout,msg){try{return await async_timeout(prom,timeout,msg);}catch(e){return e;}}
+async function wait_until(func,wait_if,max_try,delay){delay=delay||500;max_try=max_try||4;let tried=0;let value;while(tried<=max_try){value=func();if(value!==wait_if){return value;}
+await sleep(delay);tried+=1;}
+return wait_if;}
+async function default_on_page_reload(){for(const cb of user_func){try{let _c=cb();try{await _c;}catch(e){}}catch(e){console.log(['On User Func Load Error',e,cb]);}}
+user_func=[];}
+async function func_call(log_kind,cb,...params){try{let _c=cb(...params);return _c instanceof Promise?await _c:_c;}catch(e){log_critical(log_kind,cb.name,params,e);}}
+function character_strip(txt,character,side){if(txt[0]===character&&[undefined,"left","l","both"].includes(side)){txt=txt.substring(1,txt.length);}
+if(txt[txt.length-1]===character&&[undefined,"right","r","both"].includes(side)){txt=txt.substring(0,txt.length-1);}
+return txt;}
+function get_meta_content(name,container){container=container||document;let elem=container.querySelector(`meta[name="${name}"]`);return elem?elem.getAttribute('content'):"";}
+function get_baseurl_from_meta(){return get_meta_content("baseurl");}
+function get_syncer_status_from_meta(){return get_meta_content("syncer");}
+function __all_any(container,keys,__any){if(keys.length===1&&Array.isArray(keys[0])){keys=keys[0];}
+let func=cb=>__any?keys.some(cb):keys.every(cb);if(is_really_an_js_object(container)){return func(key=>key in container);}
+if(Array.isArray(container)||typeof container==="string"){return func(key=>container.includes(key));}
+return false;}
+function all(container,...keys){return __all_any(container,keys,false);}
+function any(container,...keys){return __all_any(container,keys,true);}

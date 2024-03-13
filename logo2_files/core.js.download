@@ -1,0 +1,49 @@
+window["dynamic_page_elem"]="#dynamic";window["default_full_loader_txt"]="Almost ready to go";window["last_page_change_at"]=Date.now();window["spinner_locked"]=false;function lottie_animation_dispatch(){let elem=$("#lottie-animation");if(elem.length===0){return;}
+let anim_path=get_meta_content('lottie_json_path');if(anim_path===""){return;}
+lottie.loadAnimation({container:elem[0],renderer:'svg',loop:true,autoplay:true,path:anim_path});}
+function spin(flag){let spinner=$('.page_spinner')
+if(flag){if(is_brand_pages()||is_dashboard_pages()){spinner.find('.loader-bg').removeClass('loader-bg--general');}else{spinner.find('.loader-bg').addClass('loader-bg--general');}
+spinner.removeClass('hide-me');}else{if(window["spinner_locked"]){return;}
+spinner.addClass('hide-me');}}
+function is_brand_pages(){return window.location.pathname.startsWith("/brand/");}
+function is_dashboard_pages(){return window.location.pathname.startsWith("/dashboard/");}
+function lock_spin(lock){window["spinner_locked"]=lock;}
+function set_loading(selector){$(selector).addClass('loader-box disabled');}
+function unset_loading(selector){$(selector).removeClass('loader-box disabled');}
+function set_btn_loading(selector){request_adaptor.add_loader_to_btn($(selector),{});}
+function unset_btn_loading(selector){request_adaptor.remove_loader_from_btn($(selector),{});}
+function get_eligible_inputs_by_selector(selector){let final=[];for(let elem of $(selector).toArray()){let org=null;elem=$(elem);let parent=elem.parent();let a=elem[0].className.includes("dropdown")&&elem[0].tagName.toLowerCase()==="div"&&parent[0].tagName.toLowerCase()==="div";let b=['input','select'].includes(elem[0].tagName.toLowerCase());if(a||b){if(b){org=elem;}
+elem=parent;}
+final.push(elem);if(org!==null){final.push(org);}}
+return final;}
+function set_input_loading(selector,bypass_disabling){for(let elem of get_eligible_inputs_by_selector(selector)){if(elem[0].tagName.toLowerCase()==="button"||elem[0].className.includes("btn")){set_btn_loading(elem[0]);continue;}
+elem.addClass('input-spinner');if(bypass_disabling!==true){elem.prop('disabled',true);}}}
+function unset_input_loading(selector){for(let elem of get_eligible_inputs_by_selector(selector)){if(elem[0].tagName.toLowerCase()==="button"||elem[0].className.includes("btn")){unset_btn_loading(elem[0]);continue;}
+elem.removeClass('input-spinner').prop('disabled',false);}}
+window["debounce"]=(func,delay=200)=>{let throttle_id;return function(...data){clearTimeout(throttle_id);throttle_id=setTimeout(()=>func.apply(this,data),delay);}};window["delayed_spin"]=debounce(spin,4000);function enable_full_page_loader(custom_txt){custom_txt=custom_txt?custom_txt:default_full_loader_txt;$('.FullPageLoaderText').html(custom_txt);$('#FullPageLoader').show();}
+function disable_full_page_loader(){$('#FullPageLoader').attr('style',`display: none !important`);}
+function handle_rendered_form_filling(){form_format_handler.extract_data_to_form_safe("raw_form_data");}
+function title_fixup(){let _real_title=get_meta_content('page_title');try{if(_real_title!==""){let _title_elem=$('title');_title_elem.text(_real_title);$('meta[name=page_title]').remove();}}finally{$('meta[name=page_title]').remove();}}
+function seo_fixup(){let description=get_meta_content('page_seo_description');let title=$('title').text();let type=get_meta_content('page_seo_type');let img=get_meta_content('page_seo_image');let img_alt=get_meta_content('page_seo_image_alt');try{set_basic_seo_elements_safe(title,description,type,img,img_alt);}finally{$('meta[name=page_seo_description]').remove();}}
+async function on_page_reload(options){disable_full_page_loader();lottie_animation_dispatch();request_adaptor.event.reset().on("successful_navigate_request",function(r,url,options){if(options['bypass_modal_correctness']==='1'){return;}
+modal_renderer.ensure_correct_modal_state(r,url,options);}).on("successful_navigate_request",tpl_renderer.on_navigated.bind(tpl_renderer)).on("before_navigate_request",function(url,options){if(options["bypass_spinner"]==="1"){return;}
+spin(true);}).on("after_navigate_request",()=>delayed_spin(false)).on("successful_modal_request",modal_renderer.on_modal_info_received.bind(modal_renderer)).on("before_modal_request",modal_renderer.on_modal_info_receive_started.bind(modal_renderer)).on("failed_modal_request",modal_renderer.on_modal_info_receive_failed.bind(modal_renderer)).on("before_form_request",form_format_handler.elements_cleanup.bind(form_format_handler));if(!is_really_an_js_object(options)||options['bypass_modal_correctness']!=='1'){await modal_renderer.ensure_correct_modal_state();}
+window["last_page_change_at"]=Date.now();title_fixup();seo_fixup();let page_script=get_meta_content('page_script');if(page_script){let uniq=get_meta_content('UNIQ');await safe_load_js(document.querySelector(window["dynamic_page_elem"]),`${page_script}?t=${uniq}`);}
+let _early_cb=get_meta_content("page_early_cb");await wait_until(()=>!_early_cb||_early_cb in window,false);if(_early_cb&&_early_cb in window){await window[_early_cb]();}
+main_custom_entry();spin(false);handle_rendered_form_filling();}
+async function on_modal_loaded(){disable_full_page_loader();let modal_script=get_meta_content('modal_script');if(modal_script){let uniq=get_meta_content('UNIQ');await safe_load_js(document.querySelector(window["dynamic_page_elem"]),`${modal_script}?t=${uniq}`);}
+let _early_cb=get_meta_content("modal_early_cb");await wait_until(()=>!_early_cb||_early_cb in window,false);if(_early_cb&&_early_cb in window){await window[_early_cb]();}
+main_custom_entry();handle_rendered_form_filling();}
+async function on_page_startup(){fabric_fixup();request_adaptor.enable_auto_navigation('a:not(.modal-navigation)','data-bypass-ajax','true');request_adaptor.enable_navigation_undo();request_adaptor.enable_auto_modal('.modal-navigation');request_adaptor.enable_auto_form(form_format_handler.btn_selector,{formatter:form_format_handler});$(document).on('click','.authenticate_back_to_method_select_box',()=>{$('.authenticate_otp_box').addClass('hide-me');$('.authenticate_method_select_box').removeClass('hide-me');});if(get_meta_content('just_registered')==="right"){await dispatch_success_signup_event();}
+await on_page_reload();}
+async function on_authenticate_otp_sent(form,data){if(!is_really_an_js_object(data['extra'])){return;}
+$('.otp_confirm_ident_input').val(data['extra']['identifier']);$('.selected_identifier').val(data['extra']['identifier']);$('.otp_confirm_secret').val(data['extra']['secret']);$('.authenticate_method_select_box').addClass('hide-me');$('.authenticate_otp_box').removeClass('hide-me');if("otp"in data['extra']){$('#otp_code').val(data['extra']['otp']);}
+return true;}
+async function on_preview_selected(url,options){let elem=options["modal_elem"];let tpl=elem.closest('.preview-row');let slogan=$('.slogan_input').val().trim();sessionStorage.setItem('branerate',JSON.stringify({b:$('.brand_input').val().trim(),s:slogan?slogan:get_meta_content('default_slogan'),i:tpl.attr('data-i'),l:tpl.attr('data-l'),c:tpl.attr('data-color'),t:_p_state.previews[tpl.attr('data-i')]['t'],}));}
+async function on_contact_form_succeed(){$('.normalContactBox').addClass('hide-me');await slide_down(document.querySelector('.submittedContactBox'),200);}
+async function on_pkg_selected(){$('.decidePackageBtn').off('click').on('click',function(){let btn=$(this);if(btn.attr('data-disabled')==='1'){return;}
+$('#pkgInput').val(btn.attr('data-value'));btn.closest('form').find('.FormButton')[0].click();});}
+async function dispatch_success_signup_event(){if(typeof dataLayer!=="undefined"){dataLayer.push({'event':'user_signup'});}}
+async function dashboard_delete_setup(){$('#type_delete').off('input').on('input',function(){let val=$(this).val().toLowerCase();let btn=$('.type_delete_btn');if(val==="delete"){btn.removeClass('disabled');return;}
+btn.addClass('disabled');});}
+let request_adaptor=(new PageRequestAdaptor(undefined,undefined,"Syncer",get_syncer_status_from_meta,get_baseurl_from_meta(),'btn-loading','--light',get_meta_content('gre_site_key'),get_meta_content('gre_header_name'),));let tpl_renderer=new AjaxStaticPartsTemplateRenderer('#template_static','#template_top_stuff','FORCE_WHOLE_BODY','yes',window["dynamic_page_elem"],async(r,options)=>{await on_page_reload(options);});let modal_renderer=new BSModalRenderer('#GeneralModal','.modal-content','#GeneralModalLoading',{backdrop:'static'},750,undefined,'.loader_text','x-pg-mdl',tpl_renderer.on_navigated.bind(tpl_renderer),on_modal_loaded);let form_format_handler=new FormResponseFormatHandler(".FormButton",".FormStatus",request_adaptor);$(function(){on_page_startup().then();});

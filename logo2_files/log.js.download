@@ -1,0 +1,6 @@
+function _internal_safe_log(lvl,kind,x){console[lvl]([kind,x,lvl]);}
+function log_critical(kind,...x){_internal_safe_log("error",kind,x);}
+function log_info(kind,...x){_internal_safe_log("info",kind,x);}
+function log_debug(kind,...x){_internal_safe_log("debug",kind,x);}
+function dd(...data){log_debug("dd",...data);}
+function dd_raw(...data){console.log(data);}

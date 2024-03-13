@@ -1,0 +1,88 @@
+class AsyncPromiseTimeout extends Error{constructor(msg){super(msg);this.name="AsyncPromiseTimeout";}}
+class RetryFetchApi{static ABORT_NOW="_abort_now";constructor(max_try,timeout,retry_delay,log_msg,...log_data){this._max_try=max_try||1;this._timeout=timeout||60000;this._retry_delay=retry_delay||3000;this.__log_data=log_data||[];this.__log_msg=log_msg;this._error_handlers={};this._after_request_handlers=[];this._before_request_handlers=[];this.ABORT_NOW=this.constructor.ABORT_NOW;}
+register_error_handler(status_code,cb){this._error_handlers[status_code]=cb;}
+register_before_request_handler(cb){this._before_request_handlers.push(cb);}
+register_after_request_handler(cb){this._after_request_handlers.push(cb);}
+async _fetch(url,params,expected_status_code){let ctrl=new AbortController();if(!is_really_an_js_object(params)){params={};}
+params["signal"]=ctrl.signal;if(!is_really_an_js_object(params["headers"])){params["headers"]={};}
+params["headers"]["X-Requested-With"]="XMLHttpRequest";for(const _handler of this._before_request_handlers){if(await _handler(url,params)===this.constructor.ABORT_NOW){return this.constructor.ABORT_NOW;}}
+let result=await this.with_timeout(fetch(url,params),this.__log_msg);if(result instanceof Error){ctrl.abort("timed out manually");this.log_failure("fetch infra reached timeout",result,{url:url,params:params,});return false;}
+for(const _handler of this._after_request_handlers){if(await _handler(result)===this.constructor.ABORT_NOW){return this.constructor.ABORT_NOW;}}
+if(!result.ok||result.status!==expected_status_code){if(result.status in this._error_handlers){if(await this._error_handlers[result.status](result)===this.constructor.ABORT_NOW){return this.constructor.ABORT_NOW;}}
+if("*"in this._error_handlers){if(await this._error_handlers["*"](result)===this.constructor.ABORT_NOW){return this.constructor.ABORT_NOW;}}
+this.log_failure("fetch failed because of status code",{"request_info":{response:result,settings:params,body:await result.clone().text(),url:url}});}
+return result;}
+async fetch(url_cb,param_cb,expected_status_code){let current_try=0;if(typeof param_cb==="undefined"||param_cb===null){param_cb=async()=>{return undefined;};}
+while(true){current_try+=1;let r=await this._fetch(await url_cb(),await param_cb(),expected_status_code||200);if(r===this.constructor.ABORT_NOW){return false;}
+if(r===false){if(current_try>=this._max_try){return r;}
+await sleep(this._retry_delay);continue;}
+return r;}}
+log_failure(...params){log_critical("retry_fetch_api",[...params,this.__log_msg,this.__log_data]);}
+with_timeout(prom,msg){return wait_for(prom,this._timeout,msg);}}
+class Eventino{on(kind,cb){if(!(kind in this._ensure()._eventino)){this._eventino[kind]=[];}
+if(this._eventino[kind].length>this._max_allowed_callbacks&&this._max_allowed_callbacks>0){console.info(`Adding ${cb.name} to ${kind} ignored`);return this;}
+this._eventino[kind].push(cb);return this;}
+off(kind,cb){if(!(kind in this._ensure()._eventino)){return this;}
+if(!cb){delete this._eventino[kind];return this;}
+this._eventino[kind]=this._eventino[kind].filter(v=>v!==cb);return this;}
+trigger(kind,...params){if(!(kind in this._ensure()._eventino)){return this;}
+for(const cb of this._eventino[kind]){func_call("eventino_trigger",cb,...params).then();}
+return this;}
+reset(){this._ensure()._eventino={};return this;}
+_ensure(){if(!this._eventino){this._eventino={}}
+if(isNaN(this._max_allowed_callbacks)){this._max_allowed_callbacks=-1;}
+return this;}}
+class PageRequestAdaptor{static instance;constructor(client,refresh_signaler,sync_signaler,current_sync_retrieve_cb,base_url,btn_loader_cls_prefix,btn_loader_default_mode,gre_site_key,gre_header_name){this.client=client||new RetryFetchApi(4,60000,3000,"PageContentLoading");this.client.register_after_request_handler(this._ensure_allowed.bind(this));this._refresh_signaler=refresh_signaler;this._sync_signaler=sync_signaler;this._current_sync_retrieve_cb=current_sync_retrieve_cb;this._base_url=base_url;this._btn_loader_cls_prefix=btn_loader_cls_prefix;this._btn_loader_default_mode=btn_loader_default_mode;this._gre_site_key=gre_site_key;this._gre_header_name=gre_header_name;this._tmp_cache=null;this.event=new Eventino();this.constructor.instance=this;}
+set_base_url(base_url){this._base_url=base_url;return this;}
+async navigate(url,options){let r=null;if(!is_really_an_js_object(options)){options={};}
+options['url']=url;options["navigate_kind"]=options["navigate_kind"]||"navigate";if("early_cb"in options&&options["early_cb"]in window){await window[options["early_cb"]](url,options);}
+this.event.trigger(`before_${options["navigate_kind"]}_request`,url,options);if("before_navigate_delay"in options){await sleep(options["before_navigate_delay"]);}else{await sleep(50);}
+options["request_params"]=options["request_params"]||{};options["request_params"]["headers"]=options["request_params"]["headers"]||{};options["request_params"]["headers"]["X-REQ-NT"]=options["navigate_kind"];options["start_time"]=Date.now();try{r=await this.client.fetch(async()=>{return url},async()=>{return options["request_params"];},options["expected_status_code"]);if(r===false||!r.ok){if(options["navigate_kind"]==="navigate"){window.location=url;}else{this.event.trigger(`failed_${options["navigate_kind"]}_request`,r,url,options);}
+return;}
+this.event.trigger(`successful_${options["navigate_kind"]}_request`,r,url,options);if(options["bypass_history_modify"]!==true||r.headers.get("x-ign-bypass")==="1"){window.history[options["push_history"]!==false?"pushState":"replaceState"](null,null,r.url);}}finally{if("late_cb"in options&&options["late_cb"]in window){await window[options["late_cb"]](r,url,options);}
+this.event.trigger(`after_${options["navigate_kind"]}_request`,r,url,options);}}
+enable_auto_navigation(selector,bypass_attr,bypass_value){selector=selector||'a';bypass_attr=bypass_attr||null;bypass_value=bypass_value||"true";$(document).on('click',selector,function(event){if(event.button!==0){return;}
+let anchor=$(this);if(anchor.attr("target")==="_blank"){return;}
+if(bypass_attr!==null){if(anchor.attr(bypass_attr)===bypass_value){return;}}
+let _target_url=PageRequestAdaptor.instance.pick_best_url(anchor);if(_target_url.startsWith("#")||_target_url===""){return;}
+event.preventDefault();PageRequestAdaptor.instance.navigate(PageRequestAdaptor.instance.url_fixup(_target_url),PageRequestAdaptor.instance.options_extractor_from_element(this,{navigate_elem:anchor})).then();});}
+enable_navigation_undo(){$(window).on("popstate",()=>{this.navigate(location.href,{push_history:false}).then();});}
+modal(url,options){options=options||{};options["bypass_history_modify"]=true;options["navigate_kind"]="modal";options["before_navigate_delay"]=options["before_navigate_delay"]||100;return this.navigate(url,options);}
+enable_auto_modal(selector,url_attr){selector=selector||'.modal-navigation';url_attr=url_attr||null;$(document).on('click',selector,function(event){event.preventDefault();let anchor=$(this);PageRequestAdaptor.instance.modal(PageRequestAdaptor.instance.url_fixup(url_attr===null?PageRequestAdaptor.instance.pick_best_url(anchor):anchor.attr(url_attr)),PageRequestAdaptor.instance.options_extractor_from_element(this,{modal_elem:anchor})).then();});}
+async post(url,options){if(!url.startsWith("http")){url=this._base_url+character_strip(url,"/","left");}
+let r=null;if(!is_really_an_js_object(options)){options={};}
+options['url']=url;if(options["apply_tmp_cache"]===true){this._tmp_cache={url:url,options:JSON.parse(JSON.stringify(options))}}
+if("early_cb"in options&&options["early_cb"]in window){await window[options["early_cb"]](url,options);}
+let request_params=options["request_params"]||{};if(!("method"in request_params)){request_params["method"]=options["request_method"]||"POST";}
+if(options["is_json"]===true){if(!("headers"in request_params)){request_params["headers"]={};}
+request_params["headers"]["content-type"]="application/json; charset=UTF-8";}
+this.event.trigger("before_post_request",url,options,request_params);options["start_time"]=Date.now();try{r=await this.client.fetch(async()=>{return url},async()=>{return request_params;},options["expected_status_code"]);this.event.trigger(r===false||!r.ok?"failed_post_request":"successful_post_request",r,url,options,request_params);return r;}finally{if("late_cb"in options&&options["late_cb"]in window){await window[options["late_cb"]](r,options,url,request_params);}
+this.event.trigger("after_post_request",r,options,url,request_params);}}
+json_post(url,options){if(!is_really_an_js_object(options)){options={};}
+options["is_json"]=true;return this.post(url,options);}
+async form(form,options){let url=form.attr('action');let r=null;if(!is_really_an_js_object(options)){options={};}
+if("btn_elem"in options){this.add_loader_to_btn(options['btn_elem'],options);}
+this.event.trigger("before_form_request",form,options,url);try{options["request_params"]=options["request_params"]||{};options["request_params"]["body"]=new FormData(form[0]);options["form_raw_values"]=Object.fromEntries(options["request_params"]["body"].entries());options["form_raw_action"]=url;if(!("headers"in options["request_params"])){options["request_params"]["headers"]={};}
+options["request_params"]["headers"]['X-Is-Form']="yes";let gre_action=form.attr('data-gre-action');if(gre_action&&typeof grecaptcha!=="undefined"){options["request_params"]["headers"][this._gre_header_name]=await grecaptcha.execute(this._gre_site_key,{action:gre_action});}
+r=await this.post(url,options);if("formatter"in options){await options["formatter"].handle(form,await r.clone().json(),options,r);}
+return r;}finally{if("btn_elem"in options){this.remove_loader_from_btn(options['btn_elem'],options);}
+this.event.trigger("after_form_request",r,form,options,url);}}
+enable_auto_form(btn_selector,options_extractor_cb){$(document).on('keypress','input,textarea,select',function(e){if(e.key!=="Enter"){return;}
+let inp=$(this);let form=inp.closest('form');let btn=form.find(btn_selector);if(btn.length===0){return;}
+if(!form.attr('action')){return;}
+e.preventDefault();try{this.blur();}catch(e){console.info(e);}
+btn[0].click();});$(document).on('click',btn_selector,function(e){e.preventDefault();let btn=$(this);let form=btn.closest('form');if(form.length===0){return;}
+let options={};if(is_really_an_js_object(options_extractor_cb)){options=options_extractor_cb;}else{try{options=options_extractor_cb(form);}catch(e){log_info("form_options_bad_extractor_cb",e,form.attr('action'));}}
+options['btn_elem']=btn;PageRequestAdaptor.instance.form(form,PageRequestAdaptor.instance.options_extractor_from_element(form[0],options)).then();});}
+async _ensure_allowed(result){if(this._refresh_signaler&&result.headers.has(this._refresh_signaler)&&result.headers.get(this._refresh_signaler)==="1"){window.location=window.location.href;return this.client.ABORT_NOW;}
+if(this._sync_signaler&&result.headers.has(this._sync_signaler)&&result.headers.get(this._sync_signaler)!==this._current_sync_retrieve_cb()){window.location=window.location.href;return this.client.ABORT_NOW;}
+return true;}
+options_extractor_from_element(elem,options){options=options||{};let _prefix="data-options-";for(const attr of elem.attributes){if(attr.name.startsWith(_prefix)){options[attr.name.substring(_prefix.length)]=attr.value;}}
+return options;}
+url_fixup(href){if(!href.startsWith("http")){href=this._base_url+character_strip(href,"/","left");}
+return href;}
+pick_best_url(elem){let prefer="data-href";let alternative="href";if(elem.name==="a"){prefer="href";alternative="data-href";}
+let url=elem.attr(prefer);return url?url:(elem.attr(alternative)||"");}
+get_tmp_cache(){return this._tmp_cache;}
+add_loader_to_btn(btn,options){let mode=options['mode']||this._btn_loader_default_mode;btn.addClass(`disabled ${this._btn_loader_cls_prefix} ${this._btn_loader_cls_prefix}${mode}`);}
+remove_loader_from_btn(btn,options){let mode=options['mode']||this._btn_loader_default_mode;btn.removeClass(`disabled ${this._btn_loader_cls_prefix} ${this._btn_loader_cls_prefix}${mode}`);}}

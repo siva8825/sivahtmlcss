@@ -1,0 +1,49 @@
+if(!("brand_common_state"in window)){window["brand_common_state"]={ls:{},lss:{},bid:null,transparent:null,mus:{},sep:"^_^"};}
+async function ensure_blank_img(){if(brand_common_state.transparent===null){brand_common_state.transparent=await image_loader(get_meta_content("transparent_img"));}
+return brand_common_state.transparent;}
+function clear_brand_cache(bid){bid=bid||brand_common_state.bid;brand_common_state.ls[bid]={};brand_common_state.lss[bid]={};brand_common_state.mus[bid]={};}
+async function brand_common_init(){brand_common_state.bid=get_meta_content('bid');}
+async function load_ls(bu,idx,path){if(!(brand_common_state.bid in brand_common_state.ls)){brand_common_state.ls[brand_common_state.bid]={};}
+if(!(idx in brand_common_state.ls[brand_common_state.bid])){brand_common_state.ls[brand_common_state.bid][idx]=await fetch_content(bu+path);}
+let assets=aggregate_loadable_assets(brand_common_state.ls[brand_common_state.bid][idx],'by_svg');await asset_loader(assets);return assets;}
+function get_ls(){let _m=coordinate_points(100,97,116,97,58,105,109,97,103,101,47,112,110,103,59,98,97,115,101,54,52,44);let _p=coordinate_points(103,114,111,117,110,100,95,116,104,117,109,98,95,102,114,111,110,116);return JSON.parse(atob($('#'+_p).html().substring(_m.length)));}
+function get_ls_safe(){let s=get_ls();aggregate_loadable_assets(null,null,s[0]);s[2]={};for(let _ss of s[1]){s[2][`layout${_ss[0][0]}`]=[_ss[0].substring(1),_ss[1]];}
+return s;}
+function get_u(){return get_meta_content(coordinate_points(109,117,112));}
+function get_c(){return JSON.parse(atob(get_meta_content(coordinate_points(98,99,111))));}
+function get_previews(){let _m=coordinate_points(100,97,116,97,58,105,109,97,103,101,47,112,110,103,59,98,97,115,101,54,52,44);let _n=coordinate_points(116,97,98,95,109,101,110,117,95,112,114,101,118,105,101,119);return JSON.parse(atob($('#'+_n).html().substring(_m.length)));}
+async function layout_fixup(s){s=s||get_ls_safe();let u=get_u();brand_common_state.lss[brand_common_state.bid]=brand_common_state.lss[brand_common_state.bid]||{};for(let[idx,path]of Object.entries(s[2])){if(idx in brand_common_state.lss[brand_common_state.bid]){continue;}
+let _o=await load_ls(u,idx,path[0]);brand_common_state.lss[brand_common_state.bid][idx]=await svg_font_mixer(brand_common_state.ls[brand_common_state.bid][idx],_o['font'])}
+return brand_common_state.lss[brand_common_state.bid];}
+async function common_track(form,data){if(is_really_an_js_object(form)&&data===null){data="extra"in form?Object.assign({},form):{extra:Object.assign({},form)};form=null;}
+if(!await ensure_sufficient_pkg_is_provided(data['extra'])){return true;}
+if(!("extra"in data)){return true;}
+if(data['extra']['pass_to_cb']==='allowed'){await window[data['cb']](form,data);return true;}
+if(!("track"in data["extra"])){return true;}
+let tnx_txt_elem=$('.thanksText');if(tnx_txt_elem.length>0){tnx_txt_elem.text(get_meta_content('download_staring_shortly_txt'));}
+let _last_page_change=parseInt(window["last_page_change_at"]);let track_url=get_meta_content('track_url');if(track_url===""){track_url=sessionStorage.getItem('captured_track_url');}
+while(true){if(_last_page_change!==parseInt(window["last_page_change_at"])){return false;}
+let r=await request_adaptor.json_post(track_url,{request_params:{body:JSON.stringify({track:data['extra']['track']})}});let body=null;try{body=await r.clone().json();}catch(e){log_info("track_unk_err",{txt:await r.text()})
+await sleep(5000);continue;}
+if(r.ok&&body["finished"]===true){if("url"in body){if(body["navigate"]){await request_adaptor.navigate(body["url"]);return;}
+let anchor=document.createElement('a');let lst=body["url"].split("/")
+anchor.href=body["url"];anchor.target='_blank';anchor.download=lst[lst.length-1];anchor.click();}
+return false;}
+await sleep(2000);}}
+async function ensure_sufficient_pkg_is_provided(data){if(!is_really_an_js_object(data)){return true;}
+if(data['requires']!=='upgrade'){return true;}
+let track_url=get_meta_content('track_url');if(track_url!==""){sessionStorage.setItem('captured_track_url',track_url);}
+if("save_tmp_cache"in data&&data["save_tmp_cache"]&&data["save_tmp_cache"].length>0){sessionStorage.setItem(data["save_tmp_cache"],JSON.stringify(request_adaptor.get_tmp_cache()));}
+if("to_url"in data){try{signature_state.modal.hide();}catch(e){}
+await modal_renderer.ensure_correct_modal_state();await request_adaptor.modal(data["to_url"]);}
+return false;}
+async function prepare_signature_by_key(form,data){if(!$('#md_signature_form').hasClass('show')){await reshow_selected();await sleep(50);$('.CustomSignatureLoadable').removeClass('disabled');return;}
+$('#prepare_full_input').val('0');let b=brand_common_state.bid;window[coordinate_points2(data['extra']['k'],b)](coordinate_points2(data['extra']['v'],b));$('.CustomSignatureLoadable').removeClass('disabled');animate_copy_button(window["current_pressed_btn"]);}
+async function render_previews(target_prefix,layouts,m,custom_brand_color){let is_isolate_mode=false;if(layouts){is_isolate_mode=true;}else{layouts=brand_common_state.mus[brand_common_state.bid]||{};}
+let _m=coordinate_points(100,97,116,97,58,105,109,97,103,101,47,112,110,103,59,98,97,115,101,54,52,44);let _n=coordinate_points(103,114,111,117,110,100,95,116,104,117,109,98,95,98,97,99,107);m=m||JSON.parse(atob($('#'+_n).html().substring(_m.length)));let s=get_ls_safe();let c=JSON.parse(atob(get_meta_content(coordinate_points(98,99,111))));let u=get_meta_content(coordinate_points(109,117,112));let render_data=[];for(let __m of m){for(let[layout]of Object.entries(loadable_layout_discovery(__m[0]['places']))){if(layout in layouts){continue;}
+let _o=await load_ls(u,layout,s[2][layout][0]);layouts[layout]=await image_loader(svg_to_data_url(await svg_font_mixer(svg_color_handler(brand_common_state.ls[brand_common_state.bid][layout],c),_o['font'])));}
+let _target_elem;if(typeof target_prefix==="string"){_target_elem=document.querySelector(`${target_prefix}${__m[1]}`);}else{_target_elem=target_prefix;}
+render_data.push([__m[0],await perspective_pre_loader(__m[0]['layers']),_target_elem,await image_loader(await get_transferred_img(layouts,__m[0],custom_brand_color||c.brand_color)),custom_brand_color||c.brand_color]);}
+if(is_isolate_mode!==true){brand_common_state.mus[brand_common_state.bid]=layouts;}
+for(const _params of render_data){perspective_renderer(..._params);}}
+function copy_canvas(canvas,_new){_new=_new||document.createElement('canvas');let context=_new.getContext('2d');_new.width=canvas.width;_new.height=canvas.height;context.drawImage(canvas,0,0);return _new;}

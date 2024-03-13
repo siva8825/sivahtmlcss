@@ -1,0 +1,85 @@
+window["brand_editor_state"]={s:null,cached_s:{},optional_cached_s:{},last_layout_change:0,new_brand_color:null,mus:[],_url:null};window['preview_img_prefix']="preview_image_";window["editor_font_state"]={page:0,records:[],recent:[],item_tpl:null,url_tpl:null,api_url:null,item_watch_cls:"font_item_watching",max_recent:5};window["editor_icon_state"]={page:0,records:[],recent:[],item_tpl:null,url_tpl:null,api_url:null,item_watch_cls:"icon_item_watching",max_recent:8};async function editor_preview_fixup(layout,src){if(brand_editor_state===null){return;}
+if(brand_editor_state._url!==window.location.href){}
+let cls=`built-${layout}`;let main_container=$('.mainPreviewContainer');let container=main_container.find(`.${cls}`);if(container.length===0){container=$($("#previewContainerTpl").clone().html());container.addClass(cls);let tpl=$('#previewMockupTpl');let i=0;for(let mus of brand_editor_state.mus[layout]){i+=1;let preview=$(tpl.clone().html());preview.addClass(`preview-m-${i}`)
+preview.appendTo(container);}
+container.appendTo(main_container);}
+let i=0;for(let mus of brand_editor_state.mus[layout]){i+=1;let layouts={[layout]:src};layouts["layout1"]=src;await render_previews(container.find(`.preview-m-${i}`).find('canvas').first()[0],layouts,[mus],editor_g_state.new_brand_color);}
+if(editor_g_state.new_brand_color){$('.parentMockupTemplates').css('background-color',editor_g_state.new_brand_color);}}
+async function add_font_item(font,selector,prepend){if(editor_font_state.item_tpl===null){editor_font_state.item_tpl=$('#font_item_tpl');}
+if(editor_font_state.url_tpl===null){editor_font_state.url_tpl=get_meta_content('font_url_tpl');}
+let cls=`font_item_${font['id']}`;if($(`${selector} .${cls}`).length>0){return;}
+let item=$(editor_font_state.item_tpl.html());item.addClass(`${cls} ${editor_font_state.item_watch_cls}`).attr('data-face',font['face']).attr('data-id',font['id']).attr('data-name',font['name']).attr('data-link',editor_font_state.url_tpl.replace('__PLACEHOLDER__',font['name']));item.find('img').attr('src',editor_font_state.url_tpl.replace('__PLACEHOLDER__',font['name'].split('.')[0]+'.png'));if(prepend){item.prependTo(selector);return;}
+item.appendTo(selector);}
+async function select_font_item_option(font_id){let cls=`font_item_${font_id}`;$(`.${editor_font_state.item_watch_cls}`).removeClass('selected');$(`.${cls}`).addClass('selected');}
+async function add_icon_item(icon,selector,prepend){if(editor_icon_state.item_tpl===null){editor_icon_state.item_tpl=$('#icon_item_tpl');}
+if(editor_icon_state.url_tpl===null){editor_icon_state.url_tpl=get_meta_content('icon_url_tpl');}
+let cls=`icon_item_${icon['id']}`;if($(`${selector} .${cls}`).length>0){return;}
+let item=$(editor_icon_state.item_tpl.html());item.addClass(`${cls} ${editor_icon_state.item_watch_cls}`).attr('data-id',icon['id']).attr('data-name',icon['name']);item.find('img').attr('src',editor_icon_state.url_tpl.replace('__PLACEHOLDER__',icon['name']));if(prepend){item.prependTo(selector);return;}
+item.appendTo(selector);}
+async function select_icon_item_option(icon_id){let cls=`icon_item_${icon_id}`;$(`.${editor_icon_state.item_watch_cls}`).removeClass('selected');$(`.${cls}`).addClass('selected');}
+async function simple_render_preview_img(idx){let id_cls=`${window['preview_img_prefix']}${idx}`;let rendered=$(`.${id_cls}`);let info=(await get_changes(idx))[0];let assets=aggregate_loadable_assets(info[0],'by_fabric_data_less_json');await asset_loader(assets);let img=await image_loader(svg_to_data_url(await svg_font_mixer(info[1],assets.font)));rendered.find('img')[0].src=svg2png(img);await editor_preview_fixup(idx,img);return rendered;}
+async function get_changes(needed_layout){let final=[];for(let[layout,data]of Object.entries(brand_editor_state.cached_s)){if(needed_layout&&needed_layout!==layout){continue;}
+let fc=get_canvas_by_layout(layout);final.push([data,await fabric_to_svg(fc,undefined,await get_content_dim(fc,true)),layout.substring(6)]);}
+return final;}
+async function sync_changes(){if(Object.keys(brand_editor_state.cached_s).length===0){return;}
+let r=await request_adaptor.json_post(get_meta_content('editor_save_url'),{request_params:{body:JSON.stringify({src:await get_changes(),new_brand_color:editor_g_state.new_brand_color})}})
+if(!r.ok){return false;}
+if(!(await r.json())['ok']){return false;}
+brand_editor_state.cached_s={};clear_brand_cache();ensure_editor_state_based_on_changes();}
+async function save_changes(){enable_full_page_loader('Saving Changes');try{await sync_changes();await sleep(3000);}finally{disable_full_page_loader();}
+await leave_editor_safe();await request_adaptor.navigate(get_meta_content('on_save_redirect_url'));}
+function leave_editor_safe(e){if(has_unsaved_changes()&&!confirm(get_meta_content('discard_unsaved'))){if(e){e.preventDefault();}
+return;}
+shutdown_editor();window["brand_editor_state"]=null;}
+function has_unsaved_changes(){brand_editor_state.cached_s=brand_editor_state.cached_s||{};return Object.keys(brand_editor_state.cached_s).length>0;}
+function watch_for_unexpected_close(turnoff_only){let elem=$(window);elem.off('beforeunload.editor');if(turnoff_only){return;}
+elem.on('beforeunload.editor',function(e){let editor_container_elem=document.getElementById('editor_container');if(editor_container_elem===null){$(window).off('beforeunload.editor');return;}
+leave_editor_safe(e);});}
+function ensure_editor_state_based_on_changes(){let btn=$('.editor_save');if(has_unsaved_changes()){watch_for_unexpected_close();btn.removeClass('disabled');return;}
+watch_for_unexpected_close(true);btn.addClass('disabled');}
+async function reset_editor_layout(layout,partial){delete brand_editor_state.cached_s[layout];delete brand_editor_state.optional_cached_s[layout];if(partial===true){return;}
+editor_g_state.canvases[layout].revertHistory();}
+async function load_editor(layout){let info;if(brand_editor_state.cached_s[layout]){info=brand_editor_state.cached_s[layout];}else if(brand_editor_state.optional_cached_s[layout]){info=brand_editor_state.optional_cached_s[layout];}else{info=brand_editor_state.s[2][layout][1];}
+let need_to_load_assets=aggregate_loadable_assets(info,'by_fabric_data_less_json');await asset_loader(need_to_load_assets);await init_editor(layout,info);}
+async function set_editor_focus(layout){await load_editor(layout);$(`#LayoutList > div`).removeClass('active');$(`#LayoutList > div[data-layout=${layout}]`).addClass('active');ensure_editor_state_based_on_changes();await post_editor_functionality_setup();$('.logoPreviewMockupContainer').addClass('hide-me');$(`.logoPreviewMockupContainer.built-${layout}`).removeClass('hide-me');}
+async function early_render_layout_list_images(allowed_rendering){brand_editor_state.mus=get_previews();let _img_tpl=$('#LayoutListItemTpl');let container=$('#LayoutList');let layouts=await layout_fixup(brand_editor_state.s);container.html('');for(const[idx,tpl]of Object.entries(layouts)){if(!allowed_rendering.includes(idx.substring(6)*1)){continue;}
+let rendered=$(_img_tpl.clone().html());rendered.attr('data-layout',idx);rendered.addClass(`editor_layouts ${window['preview_img_prefix']}${idx}`);let img=await image_loader(svg_to_data_url(tpl));rendered.find('img')[0].src=svg2png(await image_loader(svg_to_data_url(tpl)));await editor_preview_fixup(idx,img);rendered.appendTo(container);}}
+async function editor_functionality_setup(){$('.editor_undo').off('click').on('click',()=>canvas_undo());$('.editor_redo').off('click').on('click',()=>canvas_redo());$('.editor_save').off('click').on('click',save_changes);$(".editor_layouts").off('click').on('click',async function(){let elem=$(this);let active=$(`div.editor_layouts.active`);if(elem.attr('data-layout')===active.attr('data-layout')){return;}
+brand_editor_state.optional_cached_s[active.attr('data-layout')]=get_data_less_json();brand_editor_state.last_layout_change=Date.now();await set_editor_focus(elem.attr('data-layout'));}).off('dblclick').on('dblclick',async function(){let elem=$(this);let active=$(`div.editor_layouts.active`);if(elem.attr('data-layout')!==active.attr('data-layout')){return;}
+if(Date.now()-brand_editor_state.last_layout_change<1500){return;}
+await reset_editor_layout(elem.attr('data-layout'));});$('.edit_reset').on('click',async function(){let active=$(`div.editor_layouts.active`);await reset_editor_layout(active.attr('data-layout'));});$(document).off('keyup.editor').on('keyup.editor',function(e){let editor_container_elem=document.getElementById('editor_container');if(editor_container_elem===null){$(document).off('keyup.editor');return;}
+if(e.key==="Delete"){delete_object();return;}
+if(e.ctrlKey&&(e.key.toUpperCase()==='Z'||e.keyCode===90)){e.shiftKey?canvas_redo():canvas_undo();}});$(window).off('resize.editor').on('resize.editor',function(){let editor_container_elem=document.getElementById('editor_container');if(editor_container_elem===null){$(window).off('resize.editor');return;}
+resizeCanvas();});$('#DiscardAndLeave').on('click',leave_editor_safe);$(document).off('click','.layouts-collapse-btn').on('click','.layouts-collapse-btn',async function(){hide_dynamic_menu();});let fonts_list_target='#dynamic_nav .FontsList';let fonts_recent_target='#dynamic_nav .RecentFontsList';let fonts_list_btn_target='#dynamic_nav .ShowMoreFontsBtn';let fonts_item_target=`#dynamic_nav .${editor_font_state.item_watch_cls}`;$(document).off('show.bs.dropdown','#dynamic_nav .EditFontDD').on('show.bs.dropdown','.EditFontDD',async function(){if(editor_font_state.records.length===0&&editor_font_state.recent.length===0){editor_font_state.recent=JSON.parse(atob($('#editor_static_preview').html().split(',',2)[1]))}
+let container=$(this);if(container.attr('data-filled')==='true'){return;}
+if(editor_font_state.recent.length>0){for(let font of editor_font_state.recent){await add_font_item(font,'#dynamic_nav .RecentFontsList',true);}
+$('#dynamic_nav .RecentFontsContainer').removeClass('hide-me');}
+let n=editor_font_state.records.length;if(n>50){set_loading(fonts_list_target);$(fonts_list_btn_target).addClass('disabled');}
+try{for(let font of editor_font_state.records){await add_font_item(font,fonts_list_target);}}finally{unset_loading(fonts_list_target);$(fonts_list_btn_target).removeClass('disabled');}
+if(n===0){$(fonts_list_btn_target)[0].click();}});$(document).off('click',fonts_list_btn_target).on('click',fonts_list_btn_target,async function(){set_loading(this);if(editor_font_state.api_url===null){editor_font_state.api_url=get_meta_content('font_api_url');}
+try{let url=editor_font_state.api_url.replace('__PAGE__',editor_font_state.page+1);let r=await request_adaptor.post(url);if(!r.ok){return;}
+editor_font_state.page+=1;for(let font of await r.json()){editor_font_state.records.push(font);await add_font_item(font,fonts_list_target);}}finally{unset_loading(this);}});$(document).off('click',fonts_item_target).on('click',fonts_item_target,async function(){let elem=$(this);let font={id:elem.attr('data-id'),face:elem.attr('data-face'),name:elem.attr('data-name')};await add_font_item(font,fonts_recent_target,true);await select_font_item_option(font.id);let _assets=aggregate_loadable_assets(null,null,{font:{[font.face]:elem.attr('data-link')}});await asset_loader(_assets);await change_font_safe(font.face,font.id);$('#dynamic_nav .RecentFontsContainer').removeClass('hide-me');let _i=null;for(let i=0;i<editor_font_state.recent.length;++i){let _rf=editor_font_state.recent[i];if(_rf.id===font.id){_i=i;break;}}
+if(_i!==null){editor_font_state.recent.splice(_i,1);}
+if(editor_font_state.recent.length>=editor_font_state.max_recent){let removed=editor_font_state.recent.shift();$(`#dynamic_nav .RecentFontsContainer .font_item_${removed['id']}`).remove();}
+editor_font_state.recent.push(font);});let icons_list_target='#dynamic_nav .IconsList';let icons_recent_target='#dynamic_nav .RecentIconsList';let icons_list_btn_target='#dynamic_nav .ShowMoreIconsBtn';let icons_item_target=`#dynamic_nav .${editor_icon_state.item_watch_cls}`;$(document).off('show.bs.dropdown','#dynamic_nav .EditIconDD').on('show.bs.dropdown','.EditIconDD',async function(){if(editor_icon_state.records.length===0&&editor_icon_state.recent.length===0){editor_icon_state.recent=JSON.parse(atob($('#editor_button_preview').html().split(',',2)[1]))}
+let container=$(this);if(container.attr('data-filled')==='true'){return;}
+if(editor_icon_state.recent.length>0){for(let icon of editor_icon_state.recent){await add_icon_item(icon,'#dynamic_nav .RecentIconsList',true);}
+$('#dynamic_nav .RecentIconsContainer').removeClass('hide-me');}
+let n=editor_icon_state.records.length;if(n>50){set_loading(icons_list_target);$(icons_list_btn_target).addClass('disabled');}
+try{for(let icon of editor_icon_state.records){await add_icon_item(icon,icons_list_target);}}finally{unset_loading(icons_list_target);$(icons_list_btn_target).removeClass('disabled');}
+if(n===0){$(icons_list_btn_target)[0].click();}});$(document).off('click',icons_list_btn_target).on('click',icons_list_btn_target,async function(){set_loading(this);if(editor_icon_state.api_url===null){editor_icon_state.api_url=get_meta_content('icon_api_url');}
+try{let url=editor_icon_state.api_url.replace('__PAGE__',editor_icon_state.page+1);let r=await request_adaptor.post(url);if(!r.ok){return;}
+editor_icon_state.page+=1;for(let icon of await r.json()){editor_icon_state.records.push(icon);await add_icon_item(icon,icons_list_target);}}finally{unset_loading(this);}});$(document).off('click',icons_item_target).on('click',icons_item_target,async function(){let elem=$(this);let icon={id:elem.attr('data-id'),name:elem.attr('data-name')};await add_icon_item(icon,icons_recent_target,true);await select_icon_item_option(icon.id);let _assets=aggregate_loadable_assets(null,null,{svg:{[icon.id]:elem.find('img').first().attr('src')}});await asset_loader(_assets);await change_svg_safe(icon.id);$('#dynamic_nav .RecentIconsContainer').removeClass('hide-me');let _i=null;for(let i=0;i<editor_icon_state.recent.length;++i){let _ri=editor_icon_state.recent[i];if(_ri.id===icon.id){_i=i;break;}}
+if(_i!==null){editor_icon_state.recent.splice(_i,1);}
+if(editor_icon_state.recent.length>=editor_icon_state.max_recent){let removed=editor_icon_state.recent.shift();$(`#dynamic_nav .RecentFontsContainer .font_item_${removed['id']}`).remove();}
+editor_icon_state.recent.push(icon);});}
+function save_active_layout_to_cache(remove_cache_on_no_undo,idx){if(!idx){let active=$(`div.editor_layouts.active`);idx=active.attr('data-layout');}
+brand_editor_state.cached_s[idx]=get_data_less_json(idx);simple_render_preview_img(idx).then();if(remove_cache_on_no_undo===true&&editor_g_state.canvas.historyUndo.length===0){delete brand_editor_state.cached_s[idx];}
+ensure_editor_state_based_on_changes();}
+async function sync_brand_color(new_brand_color){editor_g_state.new_brand_color=new_brand_color;for(let[layout,canvas]of Object.entries(editor_g_state.canvases)){fabric_change_united_color_by_canvas(canvas,new_brand_color);await save_active_layout_to_cache(undefined,layout);}}
+async function post_editor_functionality_setup(){editor_g_state.canvas.off('history:append',save_active_layout_to_cache).on('history:append',save_active_layout_to_cache);editor_g_state.canvas.off('history:undo',save_active_layout_to_cache).on('history:undo',async function(){save_active_layout_to_cache(true);});editor_g_state.canvas.off('history:revert',save_active_layout_to_cache).on('history:revert',async function(){save_active_layout_to_cache();let active=$(`div.editor_layouts.active`);await reset_editor_layout(active.attr('data-layout'),true);ensure_editor_state_based_on_changes();});editor_g_state.canvas.off('history:redo',save_active_layout_to_cache).on('history:redo',save_active_layout_to_cache);editor_g_state.canvas.off('brand:color:changed',sync_brand_color).on('brand:color:changed',sync_brand_color);}
+async function editor_setup(){brand_editor_state._url=window.location.href;await brand_common_init();restart_editor();brand_editor_state.s=get_ls_safe();let allowed_rendering=get_meta_content("allowed_rendering").split(",").map((v)=>v*1);await early_render_layout_list_images(allowed_rendering);let focus=get_meta_content('default_focus');if(focus===""){focus="layout1";}
+for(let _layout of allowed_rendering){_layout=`layout${_layout}`;if(_layout===focus){continue;}
+if(!(_layout in brand_editor_state.s[2])){continue;}
+await load_editor(_layout);}
+await editor_functionality_setup();await set_editor_focus(focus);}

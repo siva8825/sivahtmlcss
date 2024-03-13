@@ -1,0 +1,1393 @@
+*{
+    padding: 0%;
+    margin: 0%;
+    text-decoration: none;
+    box-sizing: border-box;
+    
+}
+li{
+    color: black;
+}
+li:hover{
+    color: lightgray;
+    cursor: pointer;
+}
+#navi{
+    background-color: white;
+}
+
+#gater{
+    display: flex;
+    list-style-type: none;
+width: 300px;
+justify-content: space-evenly;
+}
+
+#mobi{
+    align-items: center;
+    background-color: whitesmoke;
+    height: 100px;
+    display: flex;
+    align-items: center;
+}
+
+
+    
+
+select{
+    width: 50px;
+    height: 40px;
+    background-color: black;
+    color: white;
+    margin-left: 80px;
+}
+select:hover{
+    background-color:rgb(40, 40, 155);
+    
+}
+
+input{
+    width: 530px;
+    height: 40px;
+}
+
+.fa-magnifying-glass{
+    color: white;
+    background-color: black;
+    /* height: 40px;
+    width: 40px;
+    align-items: center; */
+    padding: 12px;
+}
+.fa-magnifying-glass:hover{
+    background-color: black;
+}
+
+.fa-user{
+    background-color: gray;
+    color: white;
+    padding: 8px;
+    margin-left: 53px;
+    border-radius: 15px;
+}
+.fa-user:hover{
+    background-color: black;
+}
+
+li{
+    color: gray;
+}
+li:hover{
+    color: black;
+}
+.fa-pen{
+    background-color: gray;
+    color: white;
+    padding: 8px;
+    margin-left: 10px;
+    border-radius: 17px;
+}
+.fa-pen:hover{
+    background-color: black;
+}
+
+#user2{
+    margin-left: 20px;
+}
+
+.fa-heart{
+    background-color: gray;
+    color: white;
+    padding: 8px;
+    margin-left: 8px;
+    border-radius: 17px;
+    
+}
+.fa-heart:hover{
+    background-color: black;
+}
+
+#user3{
+    margin-left: 20px;
+}
+
+.fa-cart-shopping{
+    background-color: black;
+    color: white;
+    padding: 15px;
+    margin-left: 40px;
+    margin-bottom: 5px;
+    
+}
+
+#hub{
+    width: 100%;
+    height: 45px;
+    background-color: black;
+    display: flex;
+    align-items: center;
+    position: sticky;
+    top: 0px;
+    z-index: 3;
+    
+}
+
+option{
+    background-color: white;
+    color: black;
+
+}
+#browse{
+    /* margin-left: 25px; */
+    background-color: rgb(123, 145, 181);
+    padding: 14px;
+}
+#browse:hover{
+    background-color: white;
+}
+
+#ho{
+    background-color: black;
+    color: white;
+    padding: 15px;
+    font-size: smaller;
+}
+#ho:hover{
+    background-color: white;
+    color: black;
+}
+
+#mobile{
+    background-color: black;
+    color: white;
+    padding: 15px;
+    font-size: smaller;
+}
+#mobile:hover{
+    background-color: white;
+    color: black;
+}
+
+#tablets{
+    background-color: black;
+    color: white;
+    padding: 15px;
+    font-size: smaller;
+}
+#tablets:hover{
+    background-color: white;
+    color: black;
+}
+
+#lap{
+    background-color: black;
+    color: white;
+    padding: 15px;
+    font-size: smaller;
+}
+#lap:hover{
+    background-color: white;
+    color: black;
+}
+
+#app{
+    background-color: black;
+    color: white;
+    padding: 15px;
+    font-size: smaller;
+}
+#app:hover{
+    background-color: white;
+    color: black;
+}
+
+#gad{
+    background-color: black;
+    color: white;
+    padding: 15px;
+    font-size: smaller;
+}
+#gad:hover{
+    background-color: white;
+    color: black;
+}
+
+#led{
+    background-color: black;
+    color: white;
+    padding: 15px;
+    font-size: smaller;
+}
+#led:hover{
+    background-color: white;
+    color: black;
+}
+
+#show{
+    background-color: black;
+    color: white;
+    padding: 15px;
+    font-size: smaller;
+}
+#show:hover{
+    background-color: white;
+    color: black;
+}
+
+.fa-square-whatsapp{
+    background-color: green;
+    color: black;
+    padding: 6px;
+}
+#whats{
+    color: white;
+    margin-left: 115px;
+    padding: 11px;
+}
+#whats:hover{
+    color: black;
+    background-color: white;
+}
+
+#image{
+    width: 950px;
+    height: 460px;
+    animation-name: change;
+    background-image: url(oppo\ 1.jpg);
+    /* background-attachment: fixed; */
+    background-repeat: no-repeat;
+    background-size:contain;
+    animation-duration: 20s;
+    animation-iteration-count: infinite;
+    
+    
+}
+@keyframes change{
+    20%{
+        background-image: url(vivox100.jpg);
+        background-repeat: no-repeat;
+    }
+   40%{
+    background-image: url(realme12.jpg);
+    background-repeat: no-repeat;
+ }
+  60%{
+    background-image: url(oneplus12.jpg);
+    background-repeat: no-repeat;
+  }
+ 80%{
+    background-image: url(reno11.jpg);
+    background-repeat: no-repeat;
+ }
+100%{
+    background-image: url(s24\ ultra.jpg);
+    background-repeat: no-repeat;
+}
+}
+
+#get{
+    margin-left: 950px;
+    padding: 8px;
+    padding-bottom: 8px;
+    margin-top: 14px;
+  
+}
+#tv{
+    margin-left: 950px;
+    padding: 8px;
+  
+}
+
+#ship{
+    width: 100%;
+    height: 100px;
+    background-color:rgb(65, 80, 90);
+    display: flex;
+    text-align: center;
+
+}
+
+.fa-truck-fast{
+   color:rgb(231, 111, 67);
+   border: 2px solid black;
+    border-radius: 100%;
+   padding: 16px;
+}
+#ing{
+    /* border: 1px solid black; */
+    /* border-radius: 100px; */
+    width:fit-content;
+    display: flex;
+ align-items: center;
+ margin-left: 60px;
+}
+
+#free{
+    margin-left: 20px;
+    text-align: left;
+}
+
+.fa-arrow-left{
+    color:rgb(231, 111, 67);
+    border: 2px solid black;
+     border-radius: 100%;
+    padding: 16px;
+ }
+ #ret{
+     /* border: 1px solid black; */
+     /* border-radius: 100px; */
+     width:fit-content;
+     display: flex;
+  align-items: center;
+  margin-left:110px;
+ }
+ 
+ #urn{
+     margin-left: 20px;
+     text-align: left;
+ }
+
+ .fa-shield-halved{
+    color:rgb(231, 111, 67);
+    border: 2px solid black;
+     border-radius: 100%;
+    padding: 16px;
+ }
+ #she{
+     /* border: 1px solid black; */
+     /* border-radius: 100px; */
+     width:fit-content;
+     display: flex;
+  align-items: center;
+  margin-left:110px;
+ }
+ 
+ #ild{
+     margin-left: 20px;
+     text-align: left;
+ }
+ 
+ .fa-cube{
+    color:rgb(231, 111, 67);
+    border: 2px solid black;
+     border-radius: 100%;
+    padding: 16px;
+ }
+ #cu{
+     /* border: 1px solid black; */
+     /* border-radius: 100px; */
+     width:fit-content;
+     display: flex;
+  align-items: center;
+  margin-left: 110px;
+ }
+ 
+ #be{
+     margin-left: 20px;
+     text-align: left;
+ }
+
+ #est{
+    text-decoration: underline;
+    margin-left: 30px;
+ }
+
+ #phones{
+    display: flex;
+    text-align: center;
+    /* margin-left: 70px; */
+    justify-content: space-evenly;
+ }
+
+ #iphone{
+    border: 2px solid whitesmoke ;
+    /* padding:6px; */
+    margin-left: 15px;
+    z-index: 1;
+ }
+ 
+ #dis{
+   width:50px;
+   padding: 5px;
+    z-index: 2;
+    background-color:rgb(216, 55, 55);
+    color: white;
+    margin-left: 200px;
+   
+  
+    /* border-radius: 20px; */
+    
+ }
+
+ #rate1{
+    display: flex;
+    text-align: center;
+    margin-left: 40px;
+ }
+ 
+ #cart1{
+    display: flex;
+    border-radius: 5px;
+    width: fit-content;
+    margin-left: 15px;
+    margin-top: 10px;
+    
+ }
+
+ .fa-right-left{
+    background-color: gray;
+    color: white;
+    padding: 8px;
+    margin-left: 8px;
+    border-radius: 17px;
+    
+}
+
+
+#samsung{
+    border: 2px solid whitesmoke ;
+    /* padding:6px; */
+    margin-left: 20px;
+    z-index: 1;
+ }
+ 
+ #dis2{
+   width:50px;
+   padding: 5px;
+    z-index: 2;
+    background-color:rgb(216, 55, 55);
+    color: white;
+    margin-left: 200px;
+   
+  
+    /* border-radius: 20px; */
+    
+ }
+
+ #rate2{
+    display: flex;
+    text-align: center;
+    margin-left: 40px;
+ }
+ 
+ #cart2{
+    display: flex;
+    border-radius: 5px;
+    width: fit-content;
+    margin-left: 15px;
+    margin-top: 10px;
+    
+ }
+
+ .fa-right-left{
+    background-color: gray;
+    color: white;
+    padding: 8px;
+    margin-left: 8px;
+    border-radius: 17px;
+    
+}
+
+#oppo{
+    border: 2px solid whitesmoke ;
+    /* padding:6px; */
+    margin-left: 20px;
+    z-index: 1;
+ }
+ 
+ #dis3{
+   width:50px;
+   padding: 5px;
+    z-index: 2;
+    background-color:rgb(216, 55, 55);
+    color: white;
+    margin-left: 200px;
+   
+  
+    /* border-radius: 20px; */
+    
+ }
+
+ #rate3{
+    display: flex;
+    text-align: center;
+    margin-left: 40px;
+ }
+ 
+ #cart3{
+    display: flex;
+    border-radius: 5px;
+    width: fit-content;
+    margin-left: 15px;
+    margin-top: 10px;
+    
+ }
+
+ .fa-right-left{
+    background-color: gray;
+    color: white;
+    padding: 8px;
+    margin-left: 8px;
+    border-radius: 17px;
+    
+}
+
+
+#vivo{
+    border: 2px solid whitesmoke ;
+    /* padding:6px; */
+    margin-left: 20px;
+    z-index: 1;
+ }
+ 
+ #dis4{
+   width:50px;
+   padding: 5px;
+    z-index: 2;
+    background-color:rgb(216, 55, 55);
+    color: white;
+    margin-left: 200px;
+   
+  
+    /* border-radius: 20px; */
+    
+ }
+
+ #rate4{
+    display: flex;
+    text-align: center;
+    margin-left: 40px;
+ }
+ 
+ #cart4{
+    display: flex;
+   border-radius: 5px; 
+    width: fit-content;
+    margin-left: 15px;
+    margin-top: 10px;
+    text-decoration: none;
+
+    
+ }
+
+ .fa-right-left{
+    background-color: gray;
+    color: white;
+    padding: 8px;
+    margin-left: 8px;
+    border-radius: 17px;
+    
+}
+
+#see{
+    display: flex;
+  justify-content: center;
+
+}
+#al{
+    background-color: black;
+    color: white;
+    padding: 8px;
+}
+#al:hover{
+    background-color: blue;
+}
+
+
+#end{
+    text-decoration: underline;
+    margin-left: 30px;
+ }
+
+ #gadgets{
+    display: flex;
+    text-align: center;
+    /* margin-left: 70px; */
+    justify-content: space-evenly;
+ }
+
+ #neckband{
+    border: 2px solid whitesmoke ;
+    /* padding:6px; */
+    margin-left: 15px;
+    z-index: 1;
+ }
+ 
+ #dis6{
+   width:50px;
+   padding: 5px;
+    z-index: 2;
+    background-color:rgb(216, 55, 55);
+    color: white;
+    margin-left: 200px;
+   
+  
+    /* border-radius: 20px; */
+    
+ }
+
+ #rate6{
+    display: flex;
+    text-align: center;
+    margin-left: 65px;
+ }
+ 
+ #cart6{
+    display: flex;
+    border-radius: 5px;
+    width: fit-content;
+    margin-left: 15px;
+    margin-top: 10px;
+    
+ }
+
+ .fa-right-left{
+    background-color: gray;
+    color: white;
+    padding: 8px;
+    margin-left: 8px;
+    border-radius: 17px;
+    
+}
+
+
+#buds{
+    border: 2px solid whitesmoke ;
+    /* padding:6px; */
+    margin-left: 20px;
+    z-index: 1;
+ }
+ 
+ #dis7{
+   width:50px;
+   padding: 5px;
+    z-index: 2;
+    background-color:rgb(216, 55, 55);
+    color: white;
+    margin-left: 200px;
+   
+  
+    /* border-radius: 20px; */
+    
+ }
+
+ #rate7{
+    display: flex;
+    text-align: center;
+    margin-left: 40px;
+ }
+ 
+ #cart7{
+    display: flex;
+    border-radius: 5px;
+    width: fit-content;
+    margin-left: 15px;
+    margin-top: 10px;
+    
+ }
+
+ .fa-right-left{
+    background-color: gray;
+    color: white;
+    padding: 8px;
+    margin-left: 8px;
+    border-radius: 17px;
+    
+}
+
+#bank{
+    border: 2px solid whitesmoke ;
+    /* padding:6px; */
+    margin-left: 20px;
+    z-index: 1;
+ }
+ 
+ #dis8{
+   width:50px;
+   padding: 5px;
+    z-index: 2;
+    background-color:rgb(216, 55, 55);
+    color: white;
+    margin-left: 200px;
+   
+  
+    /* border-radius: 20px; */
+    
+ }
+
+ #rate8{
+    display: flex;
+    text-align: center;
+    margin-left: 40px;
+ }
+ 
+ #cart8{
+    display: flex;
+    border-radius: 5px;
+    width: fit-content;
+    margin-left: 15px;
+    margin-top: 10px;
+    
+ }
+
+ .fa-right-left{
+    background-color: gray;
+    color: white;
+    padding: 8px;
+    margin-left: 8px;
+    border-radius: 17px;
+    
+}
+
+
+#typec{
+    border: 2px solid whitesmoke ;
+    /* padding:6px; */
+    margin-left: 20px;
+    z-index: 1;
+ }
+ 
+ #dis9{
+   width:50px;
+   padding: 5px;
+    z-index: 2;
+    background-color:rgb(216, 55, 55);
+    color: white;
+    margin-left: 200px;
+   
+  
+    /* border-radius: 20px; */
+    
+ }
+
+ #rate9{
+    display: flex;
+    text-align: center;
+    margin-left: 40px;
+ }
+ 
+ #cart9{
+    display: flex;
+   border-radius: 5px; 
+    width: fit-content;
+    margin-left: 15px;
+    margin-top: 10px;
+    text-decoration: none;
+
+    
+ }
+
+ .fa-right-left{
+    background-color: gray;
+    color: white;
+    padding: 8px;
+    margin-left: 8px;
+    border-radius: 17px;
+    
+}
+
+
+
+
+
+
+
+#apply{
+    text-decoration: underline;
+    margin-left: 30px;
+ }
+
+ #ces{
+    display: flex;
+    text-align: center;
+    /* margin-left: 70px; */
+    justify-content: space-evenly;
+ }
+
+ #fridge{
+    border: 2px solid whitesmoke ;
+    /* padding:6px; */
+    margin-left: 15px;
+    z-index: 1;
+ }
+ 
+ #dis11{
+   width:50px;
+   padding: 5px;
+    z-index: 2;
+    background-color:rgb(216, 55, 55);
+    color: white;
+    margin-left: 200px;
+   
+  
+    /* border-radius: 20px; */
+    
+ }
+
+ #rate11{
+    display: flex;
+    text-align: center;
+    margin-left: 37px;
+ }
+ 
+ #cart11{
+    display: flex;
+    border-radius: 5px;
+    width: fit-content;
+    margin-left: 15px;
+    margin-top: 10px;
+    
+ }
+
+ .fa-right-left{
+    background-color: gray;
+    color: white;
+    padding: 8px;
+    margin-left: 8px;
+    border-radius: 17px;
+    
+}
+
+
+#cool{
+    border: 2px solid whitesmoke ;
+    /* padding:6px; */
+    margin-left: 20px;
+    z-index: 1;
+ }
+ 
+ #dis12{
+   width:50px;
+   padding: 5px;
+    z-index: 2;
+    background-color:rgb(216, 55, 55);
+    color: white;
+    margin-left: 200px;
+   
+  
+    /* border-radius: 20px; */
+    
+ }
+
+ #rate12{
+    display: flex;
+    text-align: center;
+    margin-left: 40px;
+ }
+ 
+ #cart12{
+    display: flex;
+    border-radius: 5px;
+    width: fit-content;
+    margin-left: 15px;
+    margin-top: 10px;
+    
+ }
+
+ .fa-right-left{
+    background-color: gray;
+    color: white;
+    padding: 8px;
+    margin-left: 8px;
+    border-radius: 17px;
+    
+}
+
+#wash{
+    border: 2px solid whitesmoke ;
+    /* padding:6px; */
+    margin-left: 20px;
+    z-index: 1;
+ }
+ 
+ #dis13{
+   width:50px;
+   padding: 5px;
+    z-index: 2;
+    background-color:rgb(216, 55, 55);
+    color: white;
+    margin-left: 200px;
+   
+  
+    /* border-radius: 20px; */
+    
+ }
+
+ #rate13{
+    display: flex;
+    text-align: center;
+    margin-left: 40px;
+ }
+ 
+ #cart13{
+    display: flex;
+    border-radius: 5px;
+    width: fit-content;
+    margin-left: 15px;
+    margin-top: 10px;
+    
+ }
+
+ .fa-right-left{
+    background-color: gray;
+    color: white;
+    padding: 8px;
+    margin-left: 8px;
+    border-radius: 17px;
+    
+}
+
+
+#mix{
+    border: 2px solid whitesmoke ;
+    /* padding:6px; */
+    margin-left: 20px;
+    z-index: 1;
+ }
+ 
+ #dis14{
+   width:50px;
+   padding: 5px;
+    z-index: 2;
+    background-color:rgb(216, 55, 55);
+    color: white;
+    margin-left: 200px;
+   
+  
+    /* border-radius: 20px; */
+    
+ }
+
+ #rate14{
+    display: flex;
+    text-align: center;
+    margin-left: 40px;
+ }
+ 
+ #cart14{
+    display: flex;
+   border-radius: 5px; 
+    width: fit-content;
+    margin-left: 15px;
+    margin-top: 10px;
+    text-decoration: none;
+
+    
+ }
+
+ .fa-right-left{
+    background-color: gray;
+    color: white;
+    padding: 8px;
+    margin-left: 8px;
+    border-radius: 17px;
+    
+}
+
+
+
+
+
+
+#ledtv2{
+    text-decoration: underline;
+    margin-left: 30px;
+ }
+
+ #dtv{
+    display: flex;
+    text-align: center;
+    /* margin-left: 70px; */
+    justify-content: space-evenly;
+ }
+
+ #qled{
+    border: 2px solid whitesmoke ;
+    /* padding:6px; */
+    margin-left: 15px;
+    z-index: 1;
+ }
+ 
+ #dis15{
+   width:50px;
+   padding: 5px;
+    z-index: 2;
+    background-color:rgb(216, 55, 55);
+    color: white;
+    margin-left: 200px;
+   
+  
+    /* border-radius: 20px; */
+    
+ }
+
+ #rate15{
+    display: flex;
+    text-align: center;
+    margin-left: 37px;
+ }
+ 
+ #cart15{
+    display: flex;
+    border-radius: 5px;
+    width: fit-content;
+    margin-left: 15px;
+    margin-top: 10px;
+    
+ }
+
+ .fa-right-left{
+    background-color: gray;
+    color: white;
+    padding: 8px;
+    margin-left: 8px;
+    border-radius: 17px;
+    
+}
+
+
+#sony{
+    border: 2px solid whitesmoke ;
+    /* padding:6px; */
+    margin-left: 20px;
+    z-index: 1;
+ }
+ 
+ #dis16{
+   width:50px;
+   padding: 5px;
+    z-index: 2;
+    background-color:rgb(216, 55, 55);
+    color: white;
+    margin-left: 200px;
+   
+  
+    /* border-radius: 20px; */
+    
+ }
+
+ #rate16{
+    display: flex;
+    text-align: center;
+    margin-left: 40px;
+ }
+ 
+ #cart16{
+    display: flex;
+    border-radius: 5px;
+    width: fit-content;
+    margin-left: 15px;
+    margin-top: 10px;
+    
+ }
+
+ .fa-right-left{
+    background-color: gray;
+    color: white;
+    padding: 8px;
+    margin-left: 8px;
+    border-radius: 17px;
+    
+}
+
+#spa{
+    border: 2px solid whitesmoke ;
+    /* padding:6px; */
+    margin-left: 20px;
+    z-index: 1;
+ }
+ 
+ #dis17{
+   width:50px;
+   padding: 5px;
+    z-index: 2;
+    background-color:rgb(216, 55, 55);
+    color: white;
+    margin-left: 200px;
+   
+  
+    /* border-radius: 20px; */
+    
+ }
+
+ #rate17{
+    display: flex;
+    text-align: center;
+    margin-left: 40px;
+ }
+ 
+ #cart17{
+    display: flex;
+    border-radius: 5px;
+    width: fit-content;
+    margin-left: 15px;
+    margin-top: 10px;
+    
+ }
+
+ .fa-right-left{
+    background-color: gray;
+    color: white;
+    padding: 8px;
+    margin-left: 8px;
+    border-radius: 17px;
+    
+}
+
+
+#mi{
+    border: 2px solid whitesmoke ;
+    /* padding:6px; */
+    margin-left: 20px;
+    z-index: 1;
+ }
+ 
+ #dis18{
+   width:50px;
+   padding: 5px;
+    z-index: 2;
+    background-color:rgb(216, 55, 55);
+    color: white;
+    margin-left: 200px;
+   
+  
+    /* border-radius: 20px; */
+    
+ }
+
+ #rate18{
+    display: flex;
+    text-align: center;
+    margin-left: 40px;
+ }
+ 
+ #cart18{
+    display: flex;
+   border-radius: 5px; 
+    width: fit-content;
+    margin-left: 15px;
+    margin-top: 10px;
+    text-decoration: none;
+
+    
+ }
+
+ .fa-right-left{
+    background-color: gray;
+    color: white;
+    padding: 8px;
+    margin-left: 8px;
+    border-radius: 17px;
+    
+}
+
+#brand{
+    display: flex;
+    justify-content: center;
+    text-decoration: underline;
+}
+
+#by{
+    display: flex;
+    justify-content: space-evenly;
+
+}
+#applelogo{
+    border: 3px solid whitesmoke;
+    border-radius: 10px;
+}
+
+#sung{
+    border: 3px solid whitesmoke;
+    border-radius: 10px;
+}
+
+#opo{
+    border: 3px solid whitesmoke;
+    border-radius: 10px;
+}
+
+#vio{
+    border: 3px solid whitesmoke;
+    border-radius: 10px;
+}
+
+#iplus{
+    border: 3px solid whitesmoke;
+    border-radius: 10px;
+}
+
+#red{
+    border: 3px solid whitesmoke;
+    border-radius: 10px;
+}
+
+#micro{
+    border: 3px solid whitesmoke;
+    border-radius: 10px;
+}
+
+#nokia{
+    border: 3px solid whitesmoke;
+    border-radius: 10px;
+}
+
+#lava{
+    border: 3px solid whitesmoke;
+    border-radius: 10px;
+}
+
+#bigcontainer{
+    margin-left: 50px;
+}
+#number{
+    margin-left: 920px;
+    margin-top: -40px;
+}
+
+#us{
+    text-decoration: underline;
+}
+
+#container{
+    margin-left: 50px;
+}
+
+#socialmedia{
+    margin-left: 500px;
+    
+}
+
+#contact{
+
+    width: 1150px;
+    background-color: whitesmoke;
+}
+#email{
+    margin-left: 650px;
+    margin-top: -33px;
+}
+
+#applelogo:hover{
+    cursor: pointer;
+    color: aqua;
+}
+
+#chatbox{
+    width: fit-content;
+     position: absolute;
+    border: 1px solid lightskyblue;
+    border-radius: 100%;
+   
+      top: 500%;
+     z-index: 5;
+    margin-left: 1150px; 
+}
+.fa-rocketchat{
+padding: 10px;
+color: white;
+border-radius: 100%;
+background-color: lightskyblue;
+
+
+}
+
+.fa-rocketchat:hover{
+background-color: blue;
+cursor: pointer;
+
+}
+
+
+
+@media  screen and (max-width:600px) {
+    #phones{
+        flex-direction:column;
+
+    }
+    
+}
+
+@media  screen and (max-width:600px) {
+    #gadgets{
+        flex-direction:column;
+    }
+    
+}
+
+#icons1{
+    display: grid;
+    grid-template-columns: repeat(3,0.0fr);
+    column-gap: 10px;
+    justify-content: center;
+    background-color:whitesmoke;
+    padding: 20px;
+}
+
+
+#contact1 h4{
+    text-decoration: underline;
+}
+
+#contact1{
+
+display: grid;
+grid-template-columns: repeat(5,0.0fr);
+column-gap: 20px;
+padding: 50px;
+
+}
+
+#information{
+   display: grid;
+   grid-template-rows: repeat(7,0.0fr);
+   row-gap: 10px;
+    width: 200px;
+    height: 200px;
+    gap: 20px;
+
+}
+
+#extras{
+    display: grid;
+    grid-template-rows: repeat(4,0.0fr);
+    row-gap: 10px;
+     width: 200px;
+     height: 200px;
+     gap: 20px;
+ }
+
+ #myaccount{
+    display: grid;
+    grid-template-rows: repeat(5,0.0fr);
+    row-gap: 10px;
+     width: 200px;
+     height: 200px;
+     gap: 20px;
+ 
+ }
+
+
+ #contactus2{
+    display: grid;
+    grid-template-rows: repeat(3,0.0fr);
+    row-gap: 10px;
+    gap: 20px;
+     width: 200px;
+    height: 200px; 
+  
+ 
+ }
+
+ #image3{
+    display: grid;
+    grid-template-columns: repeat(2,0.0fr);
+    column-gap: 20px;
+    gap: 20px;
+ }
+
+ #partner{
+    margin-left: 70px;
+ }
+
+
