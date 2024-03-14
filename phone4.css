@@ -1,0 +1,496 @@
+*{
+    padding: 0%;
+    margin: 0%;
+    text-decoration: none;
+    box-sizing: border-box;
+    
+  }
+  
+  li{
+    color: black;
+  }
+  li:hover{
+    color: lightgray;
+    cursor: pointer;
+  }
+  
+  #navi{
+    background-color: white;
+  }
+  
+  #gater{
+    display: flex;
+    list-style-type: none;
+  width: 300px;
+  justify-content: space-evenly;
+  }
+  
+  #mobi{
+    align-items: center;
+    background-color: whitesmoke;
+    height: 100px;
+    display: flex;
+    align-items: center;
+  }
+  
+  
+    
+  
+  select{
+    width: 50px;
+    height: 40px;
+    background-color: black;
+    color: white;
+    margin-left: 80px;
+  }
+  select:hover{
+    background-color:rgb(40, 40, 155);
+    
+  }
+  
+  input{
+    width: 530px;
+    height: 40px;
+  }
+  
+  .fa-magnifying-glass{
+    color: white;
+    background-color: black;
+    /* height: 40px;
+    width: 40px;
+    align-items: center; */
+    padding: 12px;
+  }
+  .fa-magnifying-glass:hover{
+    background-color: black;
+  }
+  
+  .fa-user{
+    background-color: gray;
+    color: white;
+    padding: 8px;
+    margin-left: 53px;
+    border-radius: 15px;
+  }
+  .fa-user:hover{
+    background-color: black;
+  }
+  
+  li{
+    color: gray;
+  }
+  li:hover{
+    color: black;
+  }
+  .fa-pen{
+    background-color: gray;
+    color: white;
+    padding: 8px;
+    margin-left: 10px;
+    border-radius: 17px;
+  }
+  .fa-pen:hover{
+    background-color: black;
+  }
+  
+  #user2{
+    margin-left: 20px;
+  }
+  
+  .fa-heart{
+    background-color: gray;
+    color: white;
+    padding: 8px;
+    margin-left: 8px;
+    border-radius: 17px;
+    
+  }
+  .fa-heart:hover{
+    background-color: black;
+  }
+  
+  #user3{
+    margin-left: 20px;
+  }
+  
+  .fa-cart-shopping{
+    background-color: black;
+    color: white;
+    padding: 15px;
+    margin-left: 40px;
+    margin-bottom: 5px;
+    
+  }
+  
+  #hub{
+    width: 100%;
+    height: 45px;
+    background-color: black;
+    display: flex;
+    align-items: center;
+    position: sticky;
+    top: 0px;
+    z-index: 3;
+    
+  }
+  
+  option{
+    background-color: white;
+    color: black;
+  }
+  
+  #browse{
+    /* margin-left: 25px; */
+    background-color: rgb(123, 145, 181);
+    padding: 14px;
+  }
+  #browse:hover{
+    background-color: white;
+  }
+  
+  #ho{
+    background-color: black;
+    color: white;
+    padding: 15px;
+    font-size: smaller;
+  }
+  #ho:hover{
+    background-color: white;
+    color: black;
+  }
+  
+  #mobile{
+    background-color: black;
+    color: white;
+    padding: 15px;
+    font-size: smaller;
+  }
+  #mobile:hover{
+    background-color: white;
+    color: black;
+  }
+  
+  #tablets{
+    background-color: black;
+    color: white;
+    padding: 15px;
+    font-size: smaller;
+  }
+  #tablets:hover{
+    background-color: white;
+    color: black;
+  }
+  
+  #lap{
+    background-color: black;
+    color: white;
+    padding: 15px;
+    font-size: smaller;
+  }
+  #lap:hover{
+    background-color: white;
+    color: black;
+  }
+  
+  #app{
+    background-color: black;
+    color: white;
+    padding: 15px;
+    font-size: smaller;
+  }
+  #app:hover{
+    background-color: white;
+    color: black;
+  }
+  
+  #gad{
+    background-color: black;
+    color: white;
+    padding: 15px;
+    font-size: smaller;
+  }
+  #gad:hover{
+    background-color: white;
+    color: black;
+  }
+  
+  #led{
+    background-color: black;
+    color: white;
+    padding: 15px;
+    font-size: smaller;
+  }
+  #led:hover{
+    background-color: white;
+    color: black;
+  }
+  
+  #show{
+    background-color: black;
+    color: white;
+    padding: 15px;
+    font-size: smaller;
+  }
+  #show:hover{
+    background-color: white;
+    color: black;
+  }
+  
+  .fa-square-whatsapp{
+    background-color: green;
+    color: black;
+    padding: 6px;
+  }
+  #whats{
+    color: white;
+    margin-left: 115px;
+    padding: 11px;
+  }
+  #whats:hover{
+    color: black;
+    background-color: white;
+  }
+  
+  #homy{
+    display: flex;
+    align-items: center;
+    padding: 10px;
+  }
+  
+  #iphone{
+    background-color: whitesmoke;
+    width:100%;
+  height: 700px;
+    
+  }
+  
+  #maxy{
+    padding: 15px;
+    text-decoration: underline;
+  }
+  
+  #box{
+    margin-left: 30px;
+  
+  }
+  #box:hover{
+  cursor: pointer;
+  }
+  
+  #iphonepro{
+    width: fit-content;
+  }
+  
+  #iphonepro:hover{
+   border: 1px solid black;
+  }
+  
+  #iphone15pro{
+    width: fit-content;
+    margin-top: 5px;
+  }
+  
+  #iphone15pro:hover{
+    border: 1px solid black;
+  }
+  
+  
+  #iphone15promax{
+    width: fit-content;
+    margin-top: 5px;
+  }
+  
+  #iphone15promax:hover{
+    border: 1px solid black;
+  }
+
+ 
+  #bigphone{
+    width: fit-content;
+    position: relative;
+    margin-left: 130px;
+    margin-top: -260px;
+  }
+  #star{
+    width: fit-content;
+    display: flex;
+    margin-left: 540px;
+  margin-top: -500px;
+  font-size: small;
+  
+  }
+  
+  #rit{
+    font-size: large;
+    margin-left: 10px;
+    margin-top: -5px;
+    text-decoration: underline;
+  }
+  
+  #bas{
+    font-size: large;
+    margin-left: 10px;
+    margin-top: -5px;
+    text-decoration: underline;
+  }
+  
+  #price{
+   
+    margin-left: 550px;
+    margin-top: 20px;
+    border: 1px solid white;
+    padding: 15px;
+  }
+  
+  #stock{
+    width: fit-content;
+    margin-left: 750px;
+    margin-top: -80px;
+  }
+  
+  #able{
+    width: fit-content;
+    margin-left: 680px;
+  }
+  
+  #colours{
+    width: fit-content;
+  
+    margin-left: 700px;
+   }
+   #pink{
+    
+    width: 280px;
+    display: flex;
+    list-style-type: none;
+    justify-content: space-around;
+    padding: 15px;
+   }
+   
+   #pink li{
+    border: 1px solid grey;
+    padding: 10px;
+    border-radius: 5px;
+    width: 150px;
+    
+   }
+
+   
+   
+  
+   #bigcart{
+    width: 610px;
+   height: 50px;
+   padding: 3px;
+    margin-left: 650px;
+   display: flex;
+   justify-content:space-around ;
+   }
+  
+   #add{
+    width: 300px;
+   
+   }
+  
+   #dollor{
+    width: 150px;
+    height: 100px;
+   display: inline;
+    
+   }
+  
+   #qmark{
+    width: 60px;
+    height: 40px;
+    background-color: red;
+    display: flex;
+   justify-content: center;
+   
+   }
+  
+   #last{
+    width: 600px;
+    
+    display: flex;
+    justify-content: space-around;
+    margin-left: 350px;
+   }
+   h4{
+    text-decoration: underline;
+   }
+  
+   #icons1{
+    display: grid;
+    grid-template-columns: repeat(3,0.0fr);
+    column-gap: 10px;
+    justify-content: center;
+    background-color:whitesmoke;
+    padding: 20px;
+  }
+  
+  
+  #contact1 h4{
+    text-decoration: underline;
+  }
+  
+  #contact1{
+  
+  display: grid;
+  grid-template-columns: repeat(5,0.0fr);
+  column-gap: 20px;
+  padding: 50px;
+  
+  }
+  
+  #information{
+   display: grid;
+   grid-template-rows: repeat(7,0.0fr);
+   row-gap: 10px;
+    width: 200px;
+    height: 200px;
+    gap: 20px;
+  
+  }
+  
+  #extras{
+    display: grid;
+    grid-template-rows: repeat(4,0.0fr);
+    row-gap: 10px;
+     width: 200px;
+     height: 200px;
+     gap: 20px;
+  }
+  
+  #myaccount{
+    display: grid;
+    grid-template-rows: repeat(5,0.0fr);
+    row-gap: 10px;
+     width: 200px;
+     height: 200px;
+     gap: 20px;
+  
+  }
+  
+  
+  #contactus2{
+    display: grid;
+    grid-template-rows: repeat(3,0.0fr);
+    row-gap: 10px;
+    gap: 20px;
+     width: 200px;
+    height: 200px; 
+  
+  
+  }
+  
+  #image3{
+    display: grid;
+    grid-template-columns: repeat(2,0.0fr);
+    column-gap: 20px;
+    gap: 20px;
+  }
+  
+  #partner{
+    margin-left: 70px;
+  }
+  
